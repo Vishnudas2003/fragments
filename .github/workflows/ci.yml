@@ -1,6 +1,19 @@
-# modifications to .github/workflows/ci.yml
+# .github/workflows/ci.yml
 
-jobs:
+# Continuous Integration (CI) Workflow
+name: ci
+
+# This workflow will run whenever we push commits to the `main` branch, or
+# whenever there's a pull request to the `main` branch. See:
+# https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#on
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
   lint:
     name: ESLint
     runs-on: ubuntu-latest
@@ -44,3 +57,4 @@ jobs:
         # 2. Use `install-ci-test` to do it in a single command, see https://docs.npmjs.com/cli/v8/commands/npm-install-ci-test
         # run: npm install-ci-test
         run: npm install-ci-test
+  
