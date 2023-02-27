@@ -1,43 +1,52 @@
-# Use node version 18.13.0
-FROM node:18.13.0
+################################################################################# 
+## Stage 0: Base
+################################################################################# 
 
-LABEL maintainer="Kim Lee <vdputhukudi@myseneca.ca>"
-LABEL description="Fragments node.js microservice"
+# Use node version 18.13.0 Alpine-based image as the base image
+FROM node:18.13.0-alpine@sha256:fda98168118e5a8f4269efca4101ee51dd5c75c0fe56d8eb6fad80455c2f5827 AS base
 
-# We default to use port 8080 in our service
+# Set maintainer and description labels
+LABEL maintainer="Vishnu Das Puthukudi <vdputhukudi@myseneca.ca>"
+LABEL description="Fragments Node.js microservice"
+
+# Set environment variables for port, npm log level, and npm color
 ENV PORT=8080
-
-# Reduce npm spam when installing within Docker
-# https://docs.npmjs.com/cli/v8/using-npm/config#loglevel
 ENV NPM_CONFIG_LOGLEVEL=warn
-
-# Disable colour when run inside Docker
-# https://docs.npmjs.com/cli/v8/using-npm/config#color
 ENV NPM_CONFIG_COLOR=false
+
+# Set the NODE_ENV to production
+ENV NODE_ENV production
 
 # Use /app as our working directory
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files into the working dir (/app)
-COPY package*.json ./
+# Copy the package.json and package-lock.json files into /app
+COPY package*.json /app/
 
 # Install node dependencies defined in package-lock.json
-RUN npm install
+RUN npm ci --only=production
+
+###############################################################
+################## Stage 1: Local Deployment ##################
+#############################################################
+
+# Use the same base image for deployment stage
+FROM node:18.13.0-alpine@sha256:fda98168118e5a8f4269efca4101ee51dd5c75c0fe56d8eb6fad80455c2f5827 AS deploy
+
+# Set the default working directory
+WORKDIR /app
+
+# Copy generated node_modules from base stage
+COPY --from=base /app/ /app/
 
 # Copy src to /app/src/
-COPY ./src ./src
-
-# Start the container by running our server
-CMD npm start
-
-# We run our service on port 8080
-EXPOSE 8080
-
-# Copy src/
 COPY ./src ./src
 
 # Copy our HTPASSWD file
 COPY ./tests/.htpasswd ./tests/.htpasswd
 
-# Run the server
-CMD npm start
+# Start the container by running our server
+CMD ["npm", "start"]
+
+# We run our service on port 8080
+EXPOSE 8080
