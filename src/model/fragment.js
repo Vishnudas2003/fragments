@@ -20,7 +20,7 @@ class Fragment {
         throw new Error('Valid ownerID is required');
     } else if (!type) {
         throw new Error('Type Required');
-    } else if (type !== 'text/plain' && type !== 'text/plain; charset=utf-8') {
+    } else if (!Fragment.isSupportedType(type)) {
         throw new Error('Invalid type');
     } else if (typeof size !== 'number') {
         throw new Error('Size must be a number');
@@ -42,7 +42,6 @@ class Fragment {
    * @returns Promise<Array<Fragment>>
    */
   static async byUser(ownerId, expand = false) {
-    // TODO
     return listFragments(ownerId, expand);
   }
 
@@ -137,7 +136,7 @@ class Fragment {
    * @returns {boolean} true if we support this Content-Type (i.e., type/subtype)
    */
   static isSupportedType(value) {
-    if(value == 'text/plain' || value == 'text/plain; charset=utf-8') return true;
+    if(value == 'text/plain' || value == 'text/plain; charset=utf-8' || value == 'application/json' || value == 'text/markdown' || value == 'text/html') return true;
     else return false;
     // TODO
   }
