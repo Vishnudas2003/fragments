@@ -19,10 +19,10 @@ module.exports = async (req, res) => {
     const fragmentData = await fragment.getData();
     // Set the content type to the fragment's type    
     if (req.params.id.includes('html') && fragment.type === 'text/markdown') {
-      res.set('Content-Type', 'text/html');
+      res.setHeader('Content-Type', 'text/html');
       res.status(200).send(md.render(fragmentData.toString()));
     } else {
-      res.set('Content-Type', fragment.type);
+      res.setHeader('Content-Type', fragment.type);
       res.status(200).send(fragmentData);
     }
   } catch (error) {

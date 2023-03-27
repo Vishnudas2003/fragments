@@ -1,3 +1,4 @@
+
 const request = require('supertest');
 const app = require('../../src/app');
 describe('POST /v1/fragments', () =>{
@@ -35,7 +36,10 @@ describe('POST /v1/fragments', () =>{
         .auth('user1@email.com', 'password1')
         .set('content-type', 'text/plain')
         .send('Vishnu Das Puthukudi');
+
+        var data = JSON.parse(res.text);
+        expect(data.fragment.type).toBe('text/plain');
         expect(res.statusCode).toBe(201);
-        expect(res.type).toBe('text/plain')
+        
     });
 });
