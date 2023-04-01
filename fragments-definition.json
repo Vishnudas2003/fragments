@@ -29,6 +29,10 @@
             {
             "name": "PORT",
             "value": "8080"
+          },
+          {
+            "name": "AWS_S3_BUCKET_NAME",
+            "value": "vdputhukudi-fragments"
           }
         ],
         "resourceRequirements": null,
@@ -64,7 +68,7 @@
     ],
     "placementConstraints": [],
     "memory": "512",
-    "taskRoleArn": null,
+    "taskRoleArn": "arn:aws:iam::974181112817:role/LabRole",
     "compatibilities": [
       "EC2",
       "FARGATE"

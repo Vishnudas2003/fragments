@@ -19,7 +19,7 @@ jsonpath "$.fragment.size" == 19
 [Captures]
 url: header "Location"
 
-# 2. Try to GET the fragment we just posted by its URL 
+# 2. Try to GET the fragment we just posted by its URL
 GET {{url}}
 [BasicAuth]
 user1@email.com:password1
