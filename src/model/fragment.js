@@ -55,7 +55,7 @@ class Fragment {
     // TODO
     const fragment = await readFragment(ownerId, id);
     if(!fragment) throw new Error('not found');
-    return fragment;
+    return new Fragment(fragment);
   }
 
   /**
